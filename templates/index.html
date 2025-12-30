@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Swara Generator</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='CSS/style.css')}}">
+</head>
+<body>
+
+    <h2>Random Swara Generator</h2>
+
+    <form method="POST">
+        <label>Select number of Swaras:</label><br><br>
+
+        <select name="length">
+            <option value="3">3 Swaras</option>
+            <option value="5">5 Swaras</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Generate</button>
+    </form>
+
+    {% if result %}
+        <h3>Generated Result:</h3>
+        <p><b>{{ result }}</b></p>
+
+        <button onclick="playSwaras()">Play Swaras</button>
+        <script>    
+            const swaras = "{{ result }}".split(' ');
+
+            function playSwaras() {
+                let index = 0;
+
+                function playNext() {
+                    if(index < swaras.length){
+                        let audio = new Audio(`/static/sounds/${swaras[index]}.mp3`);
+                        audio.play();
+                        audio.onended = () => {
+                            index++;
+                            playNext();
+                        }
+                    }
+                }
+
+                playNext();
+            }
+        </script>
+    {% endif %}
+
+</body>
+</html>
