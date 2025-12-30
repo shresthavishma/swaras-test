@@ -9,7 +9,7 @@ def home():
 
     if request.method == "POST":
         length = int(request.form["length"])
-        swars = ['s', 'R','g', 'm', 'p', 'dha', 'n', 'saa']
+        swars = ['s', 'r','g', 'm', 'p', 'dha', 'n', 'saa']
         result = ' '.join(random.sample(swars,length))
 
     return render_template("index.html", result=result)

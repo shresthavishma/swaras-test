@@ -21,32 +21,48 @@
         <button type="submit">Generate</button>
     </form>
 
-    {% if result %}
-        <h3>Generated Result:</h3>
-        <p><b>{{ result }}</b></p>
+   {% if result %}
+    <h3>Generated Swaras:</h3>
 
-        <button onclick="playSwaras()">Play Swaras</button>
-        <script>    
-            const swaras = "{{ result }}".split(' ');
+    <div id="swara-box">
+        {% for s in result.split() %}
+            <span class="swara">{{ s }}</span>
+        {% endfor %}
+    </div>
 
-            function playSwaras() {
-                let index = 0;
+    <br>
+    <button onclick="playSwaras()">Play Swaras</button>
 
-                function playNext() {
-                    if(index < swaras.length){
-                        let audio = new Audio(`/static/sounds/${swaras[index]}.mp3`);
-                        audio.play();
-                        audio.onended = () => {
-                            index++;
-                            playNext();
-                        }
-                    }
-                }
+    <script>
+        const swaras = "{{ result }}".split(" ");
+        const swaraElements = document.querySelectorAll(".swara");
 
-                playNext();
+        function playSwaras() {
+            let index = 0;
+
+            function playNext() {
+                if (index >= swaras.length) return;
+
+                // Remove active class from all
+                swaraElements.forEach(s => s.classList.remove("active"));
+
+                // Highlight current swara
+                swaraElements[index].classList.add("active");
+
+                // Play sound
+                const audio = new Audio(`/static/sounds/${swaras[index]}.mp3`);
+                audio.play();
+
+                audio.onended = () => {
+                    index++;
+                    playNext();
+                };
             }
-        </script>
-    {% endif %}
+
+            playNext();
+        }
+    </script>
+{% endif %}
 
 </body>
 </html>
